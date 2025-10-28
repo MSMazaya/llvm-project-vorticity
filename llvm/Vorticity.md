@@ -2,6 +2,10 @@
 
 by: Muhammad Mazaya
 
+## Technical Questions
+
+The answers to the technical questions from the writeup is in [`QnA.md`](./QnA.md).
+
 ## Building and Testing the Extension
 
 ### Building LLVM
