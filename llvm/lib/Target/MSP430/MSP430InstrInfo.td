@@ -65,6 +65,7 @@ def MSP430brcc    : SDNode<"MSP430ISD::BR_CC", SDT_MSP430BrCC,
 def MSP430selectcc: SDNode<"MSP430ISD::SELECT_CC", SDT_MSP430SelectCC,
                             [SDNPInGlue]>;
 def MSP430dadd    : SDNode<"MSP430ISD::DADD", SDT_MSP430DAdd, []>;
+def MSP430mads : SDNode<"MSP430ISD::MADS", SDTIntBinOp, []>;
 
 //===----------------------------------------------------------------------===//
 // MSP430 Operand Definitions.
@@ -524,6 +525,15 @@ multiclass Arith<bits<4> opcode, string asmstring, SDPatternOperator node,
   }
 }
 
+def MADS16rr : I16rr<0b0010,
+  (outs GR16:$rd),
+  (ins GR16:$rs, GR16:$src2),
+  "mads\t$rs, $rd",
+  [(set GR16:$rd, (add GR16:$src2, (mul GR16:$src2, GR16:$rs)))]> {
+  let Constraints = "$src2 = $rd";
+}
+
+defm MUL  : Arith<0b0001, "mul",  mul,  1, []>;
 defm ADD  : Arith<0b0101, "add",  add,  1, []>;
 defm ADDC : Arith<0b0110, "addc", adde, 1, [SR]>;
 defm AND  : Arith<0b1111, "and",  and,  1, []>;
