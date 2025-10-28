@@ -122,7 +122,7 @@ MSP430TargetLowering::MSP430TargetLowering(const TargetMachine &TM,
   setOperationAction(ISD::MULHU,            MVT::i8,    Promote);
   setOperationAction(ISD::SMUL_LOHI,        MVT::i8,    Promote);
   setOperationAction(ISD::UMUL_LOHI,        MVT::i8,    Promote);
-  setOperationAction(ISD::MUL,              MVT::i16,   LibCall);
+  setOperationAction(ISD::MUL,              MVT::i16,   Legal);
   setOperationAction(ISD::MULHS,            MVT::i16,   Expand);
   setOperationAction(ISD::MULHU,            MVT::i16,   Expand);
   setOperationAction(ISD::SMUL_LOHI,        MVT::i16,   Expand);
