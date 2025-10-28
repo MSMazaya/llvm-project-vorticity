@@ -82,7 +82,7 @@ Both follow MSP430's two-operand format, where operations are expressed as `op s
 defm MUL : Arith<0b0001, "mul", mul, 1, []>;
 ```
 
-The multiply instruction was added using the existing double-operand class (I16rr) with an available opcode encoding of `0b0001`. It reuses the same multiclass infrastructure used for other arithmetic operations. A tied operand constraint was added so the destination register is both read and written, matching MSP430's read–modify–write semantics.  
+The multiply instruction was added using the existing double-operand class (I16rr) with an opcode encoding of `0b0001`. It reuses the same multiclass infrastructure used for other arithmetic operations. A tied operand constraint was added so the destination register is both read and written, matching MSP430's read–modify–write semantics.  
 
 After this addition, any `mul i16` in LLVM IR now lowers to a single machine instruction `mul rs, rd` instead of a function call.
 
@@ -105,3 +105,7 @@ def MADS16rr : I16rr<0b0010,
 The new `SDNode` (`MSP430ISD::MADS`) gives the instruction an identifier in the SelectionDAG, while the `MADS16rr` pattern defines its actual encoding (`0b0010`) and all the properties of the instruction (name, inputs, outputs, pattern, and constraint).
 
 As a result, any addition involving a multiply of the same operand will now reduce into a single `mads rs, rd` instruction during instruction selection.
+
+#### Notes on encoding
+
+All binary opcode slots (`0100–1111`) in MSP430 are already used by existing ALU instructions, so there are no free encodings left for new binops. Since the assignment allows using any encoding, `0b0010` (normally part of the jump group) was reused for `mads`. As mention earlier, this causes disassemblers to print it as something else (e.g., `jhs`), but the bytes are correct for our custom instruction in this backend.
