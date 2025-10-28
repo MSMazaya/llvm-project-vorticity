@@ -525,20 +525,15 @@ multiclass Arith<bits<4> opcode, string asmstring, SDPatternOperator node,
   }
 }
 
-let Predicates = [HasMads] in {
-  def MADS16rr : I16rr<0b0010,
-    (outs GR16:$rd),
-    (ins GR16:$rs, GR16:$src2),
-    "mads\t$rs, $rd",
-    [(set GR16:$rd, (add GR16:$src2, (mul GR16:$src2, GR16:$rs)))]> {
-    let Constraints = "$src2 = $rd";
-  }
+def MADS16rr : I16rr<0b0010,
+  (outs GR16:$rd),
+  (ins GR16:$rs, GR16:$src2),
+  "mads\t$rs, $rd",
+  [(set GR16:$rd, (add GR16:$src2, (mul GR16:$src2, GR16:$rs)))]> {
+  let Constraints = "$src2 = $rd";
 }
 
-let Predicates = [HasMul] in {
-  defm MUL  : Arith<0b0001, "mul",  mul,  1, []>;
-}
-
+defm MUL  : Arith<0b0001, "mul",  mul,  1, []>;
 defm ADD  : Arith<0b0101, "add",  add,  1, []>;
 defm ADDC : Arith<0b0110, "addc", adde, 1, [SR]>;
 defm AND  : Arith<0b1111, "and",  and,  1, []>;
